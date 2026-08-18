@@ -28,7 +28,10 @@ COPY --from=deps /app/packages ./packages
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
 COPY apps/web ./apps/web
 COPY packages ./packages
-RUN touch apps/web/.env
+RUN printf '%s\n' \
+  'BETTER_AUTH_SECRET=build-only-placeholder-not-used-at-runtime' \
+  'BETTER_AUTH_URL=http://localhost:3000' \
+  > apps/web/.env
 
 ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_AUTH_URL
@@ -57,7 +60,7 @@ USER sensus
 EXPOSE 3000
 
 HEALTHCHECK --interval=15s --timeout=3s --start-period=10s \
-  CMD wget --quiet --tries=1 --spider http://localhost:3000 || exit 1
+  CMD wget --quiet --tries=1 --spider http://127.0.0.1:3000 || exit 1
 
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "apps/web/server.js"]
