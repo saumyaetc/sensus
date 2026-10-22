@@ -130,84 +130,34 @@ function FieldInput({
 }) {
   switch (type) {
     case "short_text":
-      return (
-        <ShortTextInput
-          field={field}
-          value={(value as string) ?? ""}
-          onChange={onChange as (v: string) => void}
-        />
-      );
+      return <ShortTextInput field={field} value={(value as string) ?? ""} onChange={onChange} />;
     case "long_text":
-      return (
-        <LongTextInput
-          field={field}
-          value={(value as string) ?? ""}
-          onChange={onChange as (v: string) => void}
-        />
-      );
+      return <LongTextInput field={field} value={(value as string) ?? ""} onChange={onChange} />;
     case "email":
-      return (
-        <EmailInput
-          field={field}
-          value={(value as string) ?? ""}
-          onChange={onChange as (v: string) => void}
-        />
-      );
+      return <EmailInput field={field} value={(value as string) ?? ""} onChange={onChange} />;
     case "number":
-      return (
-        <NumberInput
-          field={field}
-          value={value as number | undefined}
-          onChange={onChange as (v: number | undefined) => void}
-        />
-      );
+      return <NumberInput field={field} value={value as number | undefined} onChange={onChange} />;
     case "single_select":
       return (
-        <SingleSelectInput
-          field={field}
-          value={(value as string) ?? ""}
-          onChange={onChange as (v: string) => void}
-        />
+        <SingleSelectInput field={field} value={(value as string) ?? ""} onChange={onChange} />
       );
     case "multi_select":
       return (
-        <MultiSelectInput
-          field={field}
-          value={(value as string[]) ?? []}
-          onChange={onChange as (v: string[]) => void}
-        />
+        <MultiSelectInput field={field} value={(value as string[]) ?? []} onChange={onChange} />
       );
     case "checkbox":
       return (
         <CheckboxSingleInput
           field={field}
           value={(value as boolean) ?? false}
-          onChange={onChange as (v: boolean) => void}
+          onChange={onChange}
         />
       );
     case "dropdown":
-      return (
-        <DropdownInput
-          field={field}
-          value={(value as string) ?? ""}
-          onChange={onChange as (v: string) => void}
-        />
-      );
+      return <DropdownInput field={field} value={(value as string) ?? ""} onChange={onChange} />;
     case "rating":
-      return (
-        <RatingInput
-          field={field}
-          value={value as number | undefined}
-          onChange={onChange as (v: number | undefined) => void}
-        />
-      );
+      return <RatingInput field={field} value={value as number | undefined} onChange={onChange} />;
     case "date":
-      return (
-        <DateInput
-          field={field}
-          value={(value as string) ?? ""}
-          onChange={onChange as (v: string) => void}
-        />
-      );
+      return <DateInput field={field} value={(value as string) ?? ""} onChange={onChange} />;
   }
 }

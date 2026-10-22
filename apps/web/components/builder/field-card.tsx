@@ -230,7 +230,7 @@ function NumInput({
         onBlur={() => {
           if (disabled) return;
           const parsed = v.trim() === "" ? null : Number(v);
-          if (parsed !== value && !Number.isNaN(parsed as number)) onSave(parsed);
+          if (parsed !== value && !Number.isNaN(parsed)) onSave(parsed);
         }}
         disabled={disabled}
         className="w-16 px-1 border border-neutral-200 rounded text-sm h-7"
