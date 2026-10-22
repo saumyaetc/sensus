@@ -6,7 +6,8 @@ export default defineConfig({
     // Tests share one Postgres DB. Run files sequentially so beforeEach
     // truncates can't race against each other.
     pool: "forks",
-    poolOptions: { forks: { singleFork: true } },
+    maxWorkers: 1,
+    fileParallelism: false,
     // 30s ceiling per test — generous, in case the DB is cold.
     testTimeout: 30_000,
     hookTimeout: 30_000,

@@ -5,7 +5,7 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 WORKDIR /app
 
 FROM base AS deps
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
+COPY .pnpmfile.cjs pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/auth/package.json ./packages/auth/
 COPY packages/database/package.json ./packages/database/
@@ -25,7 +25,7 @@ ENV DATABASE_URL=postgresql://postgres:postgres@localhost:5432/sensus
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 COPY --from=deps /app/packages ./packages
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
+COPY .pnpmfile.cjs pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
 COPY apps/web ./apps/web
 COPY packages ./packages
 RUN touch apps/web/.env
