@@ -5,7 +5,7 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 WORKDIR /app
 
 FROM base AS deps
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
+COPY .pnpmfile.cjs pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/auth/package.json ./packages/auth/
 COPY packages/database/package.json ./packages/database/
@@ -22,12 +22,12 @@ FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=deps /app/packages ./packages
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
+COPY .pnpmfile.cjs pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
 COPY apps/api ./apps/api
 COPY packages ./packages
 RUN pnpm --filter @repo/api... build
 
-RUN pnpm install --prod --frozen-lockfile --prefer-offline --force --ignore-scripts
+RUN pnpm --filter @repo/api deploy --prod --ignore-scripts /prod/api
 
 FROM node:22-alpine AS runner
 ENV NODE_ENV=production
@@ -39,11 +39,10 @@ RUN addgroup --system --gid 1001 sensus \
 
 RUN apk add --no-cache tini
 
-COPY --from=build --chown=sensus:sensus /app/node_modules ./node_modules
-COPY --from=build --chown=sensus:sensus /app/apps/api/node_modules ./apps/api/node_modules
+COPY --from=build --chown=sensus:sensus /prod/api/node_modules ./apps/api/node_modules
 COPY --from=build --chown=sensus:sensus /app/apps/api/dist ./apps/api/dist
 COPY --from=build --chown=sensus:sensus /app/apps/api/package.json ./apps/api/package.json
-COPY --from=build --chown=sensus:sensus /app/packages ./packages
+COPY --from=build --chown=sensus:sensus /app/packages/database/drizzle ./packages/database/drizzle
 COPY --from=build --chown=sensus:sensus /app/package.json ./package.json
 COPY --from=build --chown=sensus:sensus /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
 
